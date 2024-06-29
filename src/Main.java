@@ -12,19 +12,19 @@ public class Main {
         while (running) {
             System.out.println("[C]reate, [V]iew, [M]anage entries, or [Q]uit");
             System.out.print("> ");
-            String action = scanner.nextLine();
+            String action = scanner.nextLine().toUpperCase();
 
             switch (action) {
                 case "C":
                     System.out.println("Create [G]uest or [R]oom");
-                    String choice = scanner.nextLine();
+                    String choice = scanner.nextLine().toUpperCase();
                     if (choice.equals("G")) {
                         System.out.print("ID: ");
                         int guestId = scanner.nextInt();
                         System.out.print("First Name: ");
-                        String firstName = scanner.nextLine();
+                        String firstName = scanner.nextLine().toUpperCase();
                         System.out.print("Last Name: ");
-                        String lastName = scanner.nextLine();
+                        String lastName = scanner.nextLine().toUpperCase();
                         System.out.print("Party Size: ");
                         int partySize = scanner.nextInt();
                         System.out.print("Days Staying: ");
@@ -36,7 +36,7 @@ public class Main {
                         System.out.println("Room NUmber: ");
                         int roomNumber = scanner.nextInt();
                         System.out.println("[S]ingle or [D]ouble room");
-                        String roomChoice = scanner.nextLine();
+                        String roomChoice = scanner.nextLine().toUpperCase();
                         String roomType = roomChoice.equals("S") ? "Single" : "Double";
                         Room.RoomBuilder builder = new Room.RoomBuilder(roomNumber, roomType);
                         Room room = new Room(builder);
@@ -45,7 +45,7 @@ public class Main {
                     break;
                 case "V":
                     System.out.println("View [G]uests, [R]ooms, or [B]ills");
-                    String viewChoice = scanner.nextLine();
+                    String viewChoice = scanner.nextLine().toUpperCase();
                     if (viewChoice.equals("G")) {
                         List<Guest> guests = db.readAllGuests(conn);
                         for (Guest guest : guests) {
@@ -67,7 +67,7 @@ public class Main {
                     break;
                 case "M":
                     System.out.println("[U]pdate, [D]elete, [A]ssign, or [C]heckout guests");
-                    choice = scanner.nextLine();
+                    choice = scanner.nextLine().toUpperCase();
                     switch (choice) {
                         case "U":
                             System.out.println("Enter the guest ID to update: ");
@@ -81,13 +81,13 @@ public class Main {
                                 case 1:
                                     System.out.print("New First Name: ");
                                     scanner.nextLine();
-                                    String newFirstName = scanner.nextLine();
+                                    String newFirstName = scanner.nextLine().toUpperCase();
                                     db.updateFirstName(conn, guestIdUpdate, newFirstName);
                                     break;
                                 case 2:
                                     System.out.print("New Last Name: ");
                                     scanner.nextLine();
-                                    String newLastName = scanner.nextLine();
+                                    String newLastName = scanner.nextLine().toUpperCase();
                                     db.updateLastName(conn, guestIdUpdate, newLastName);
                                     break;
                                 case 3:
@@ -124,7 +124,12 @@ public class Main {
                             int unavailableRoomNumber = scanner.nextInt();
                             db.checkOutGuest(conn, unavailableRoomNumber);
                             break;
+                        default:
+                            System.out.println("Invalid choice.");
+                    break;
                     }
+                default:
+                    System.out.println("Invalid choice.");
             }
         }
     }
