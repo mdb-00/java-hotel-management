@@ -56,20 +56,18 @@ public class DbManagement {
         }
     }
 
-//    public  void createBill(Connection conn, int guestId, int roomNumber) {
-//        PreparedStatement preparedStatement;
-//        try {
-//            String q = String.format("SELECT daysStaying FROM guests WHERE guestId = '%x'", guestId);
-//            int daysStaying = Integer.parseInt(conn.p);
-//            String query = "INSERT INTO bills (guest, totalPrice) VALUES (?, ?)";
-//            preparedStatement = conn.prepareStatement(query);
-//            preparedStatement.executeUpdate();
-//            System.out.println("Bill Created");
-//        }
-//        catch (Exception e) {
-//            System.out.println(e);
-//        }
-//    }
+    public  void createBill(Connection conn) {
+        PreparedStatement preparedStatement;
+        try {
+            String query = "INSERT INTO bills (firstName, lastName, totalPrice) SELECT g.firstName, g.lastName, g.daysStaying * r.fee as totalPrice FROM guests AS g INNER JOIN rooms AS r ON g.guestId = r.guestId";
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.execute();
+            System.out.println("Bill Created");
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     public List<Guest> readAllGuests(Connection conn) {
         List<Guest> guests = new ArrayList<>();
@@ -117,6 +115,28 @@ public class DbManagement {
             System.out.println(e);
         }
         return rooms;
+    }
+
+    public List<Bill> readAllBills(Connection conn) {
+        List<Bill> bills = new ArrayList<>();
+        Statement statement;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT * FROM bills";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int totalPrice = rs.getInt("totalPrice");
+                Bill bill = new Bill(firstName, lastName, totalPrice);
+                bills.add(bill);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        return bills;
     }
 
     public void updateFirstName(Connection conn, int guestId, String newFirstName) {
@@ -199,7 +219,7 @@ public class DbManagement {
             preparedStatement = conn.prepareStatement(query);
             rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                System.out.println(rs.getString("guestid"));
+                System.out.println(rs.getString("guestId"));
                 System.out.println(rs.getString("firstName"));
                 System.out.println(rs.getString("lastName"));
                 System.out.println(rs.getString("partySize"));

@@ -58,6 +58,12 @@ public class Main {
                             System.out.println(room);
                         }
                     }
+                    else if (viewChoice.equals("B")) {
+                        List<Bill> bills = db.readAllBills(conn);
+                        for (Bill bill : bills) {
+                            System.out.println(bill);
+                        }
+                    }
                     break;
                 case "M":
                     System.out.println("[U]pdate, [D]elete, [A]ssign, or [C]heckout guests");
@@ -74,22 +80,25 @@ public class Main {
                             switch (updateGuestChoice) {
                                 case 1:
                                     System.out.print("New First Name: ");
-                                    String newFirstName = scanner.nextLine();
                                     scanner.nextLine();
+                                    String newFirstName = scanner.nextLine();
                                     db.updateFirstName(conn, guestIdUpdate, newFirstName);
                                     break;
                                 case 2:
                                     System.out.print("New Last Name: ");
+                                    scanner.nextLine();
                                     String newLastName = scanner.nextLine();
                                     db.updateLastName(conn, guestIdUpdate, newLastName);
                                     break;
                                 case 3:
                                     System.out.print("New Party Size: ");
+                                    scanner.nextLine();
                                     int newPartySize = scanner.nextInt();
                                     db.updatePartySize(conn, guestIdUpdate, newPartySize);
                                     break;
                                 case 4:
                                     System.out.println("New Days Staying: ");
+                                    scanner.nextLine();
                                     int newDaysStaying = scanner.nextInt();
                                     db.updateDaysStaying(conn, guestIdUpdate, newDaysStaying);
                                     break;
@@ -108,6 +117,7 @@ public class Main {
                             System.out.println("Guest ID: ");
                             int guestId = scanner.nextInt();
                             db.assignGuest(conn, guestId, availableRoomNumber);
+                            db.createBill(conn);
                             break;
                         case "C":
                             System.out.println("Room Number: ");
